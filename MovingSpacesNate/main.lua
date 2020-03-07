@@ -40,4 +40,15 @@ Runtime:addEventListener("enterFrame", MoveShip)
 -- new character image width and height 
 local rocketship = display.newImageRect("Images/rocketship.png", 200, 200)
 
--- new character image to be transparent 
+-- set the initial x and y position of rocketship
+rocketship.x = 700 
+rocketship.y = 600
+
+-- character image to be visable 
+rocketship.alpha = 1 
+
+local function transparencyShip(event)
+	rocketship.alpha = rocketship.alpha - 0.01
+	Runtime:addEventListener("enterFrame", transparencyShip)
+end
+
