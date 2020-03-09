@@ -47,8 +47,27 @@ rocketship.y = 600
 -- character image to be visable 
 rocketship.alpha = 1 
 
-local function transparencyShip(event)
-	rocketship.alpha = rocketship.alpha - 0.01
-	Runtime:addEventListener("enterFrame", transparencyShip)
-end
+local function MoveRocketship(event)
+	-- add the scroll speed to the x-value of the ship
+	rocketship.y = rocketship.y - scrollSpeed
+	-- change the transparency of the ship everytime it moves so that it fades out
+	rocketship.alpha = rocketship.alpha - 0.01 
+end 
 
+-- MoveShip will be called over and over again 
+Runtime:addEventListener("enterFrame", MoveRocketship)
+
+local octopus = display.newImageRect("Images/octopus.png", 200, 200)
+octopus.x = 800
+octopus.y = 600
+
+local function MoveOctopus(event)
+	-- add the scroll speed to the x-value of the ship
+	octopus.y = octopus.y - scrollSpeed
+	octopus.x = octopus.x - scrollSpeed
+	-- change the transparency of the ship everytime it moves so that it fades out
+	octopus.alpha = octopus.alpha - 0.001 
+end 
+
+-- MoveShip will be called over and over again 
+Runtime:addEventListener("enterFrame", MoveOctopus)
