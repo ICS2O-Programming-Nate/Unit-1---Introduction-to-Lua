@@ -17,6 +17,7 @@ display.setDefault("background", 255/255, 0/255, 200/255)
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
 
+
 -- create your local variables
 local questionObject
 local correctObject
@@ -25,7 +26,15 @@ local numericField
 local randomNumber1
 local randomNumber2
 local userAnswer
-local correctAnswer
+local correctAnswer = 0
+local checkmark
+local redX
+local points = 0 
+local pointsText
+local incorrectText
+local incorrectPointsText
+local incorrectPoints = 0
+local incorrectAnswer = 0
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -45,15 +54,23 @@ end
 
 local function HideCorrect()
 	correctObject.isVisible = false
-	incorrectObject.isVisible = false
+	checkmark.isVisible = false
 	AskQuestion()
 end
 
-local function NumericFieldListener( event )
+local function HideIncorrect()
+	redX.isVisible = false
+	incorrectObject.isVisible = false
+	AskQuestion()
+end 
 
-	-- user begins editing the numericField
-	if ( event.phase == "began") then
-
+-- Function: NumericFieldListener
+-- Input: event listener
+-- Ouput: none
+-- Description: This function accepts an event listener 
+local function NumericFieldListener (event)
+	-- User begins editing the numeric field
+	if ( event.phase == "began" ) then
 		-- clear the text field
 		event.target.text = ""
 
@@ -66,27 +83,57 @@ local function NumericFieldListener( event )
 		if (userAnswer == correctAnswer) then
 			correctObject.isVisible = true
 			incorrectObject.isVisible = false
-			timer.performWithDelay(2000, HideCorrect)
+			checkmark.isVisible = true
+			redX.isVisible = false
+			incorrectText = false
+			-- add a point
+			points = points + 1
+			-- update it in the display object
+			pointsText.text = "Points = " .. points 
+			timer.performWithDelay(3000, HideCorrect)			
 		else 
+			incorrectObject.text = "Sorry! That's incorrect.\nThe correct answer is \n".. correctAnswer
 			incorrectObject.isVisible = true
 			correctObject.isVisible = false
-			timer.performWithDelay(2000, HideCorrect)
+			checkmark.isVisible = false
+			-- add the incorrect points
+			incorrectPoints = incorrectPoints + 1
+			-- update it in the display object
+			incorrectPointsText.text = "Incorrect Points = " .. incorrectPoints
+			redX.isVisible = true
+			timer.performWithDelay(3000, HideIncorrect)
 		end
+
 		-- clear the text field
 		event.target.text = ""
 	end
+
+	if (points == 5) then
+		local win = display.newImageRect("Images/Winner.jpg", 1024, 1000)
+		win.x = 350
+		win.y = 359
+	end
+
+	if (incorrectPoints == 3) then
+		local lose = display.newImageRect("Images/GameOver.jpg", 1024, 1000)
+		lose.x = 350
+		lose.y = 359
+	end
 end
+
+
+
 
 -----------------------------------------------------------------------------------------
 -- OBJECT CREATION
 -----------------------------------------------------------------------------------------
 
 -- displays a question and sets the color
-questionObject = display.newText( "", display.contentWidth/3, display.contentHeight/2, nil, 50)
+questionObject = display.newText( "", display.contentWidth/3, display.contentHeight/2, nil, 75)
 questionObject:setTextColor(11/255, 16/255, 189/255)
 
 -- create the correct text object and make it invisible
-correctObject = display.newText( "Correct!", display.contentWidth/2, display.contentHeight*2/3, nil, 50 )
+correctObject = display.newText( "Correct!", display.contentWidth*1/4, display.contentHeight*1/6, nil, 50 )
 correctObject:setTextColor(199/255, 41/255, 205/255)
 correctObject.isVisible = false
 
@@ -95,13 +142,28 @@ numericField = native.newTextField( display.contentWidth*2/3, display.contentHei
 numericField.inputType = "number"
 
 -- create the incorrect text object and make it invisible
-incorrectObject = display.newText( "Incorrect. Try another one.", display.contentWidth*1/3, display.contentHeight*1/3, nil, 50 )
+incorrectObject = display.newText( "", display.contentWidth*4/5, display.contentHeight*1/2, nil, 40 )
 incorrectObject:setTextColor(2/255, 60/255, 219/255)
 incorrectObject.isVisible = false
 
+-- create the checkmark
+checkmark = display.newImageRect("Images/checkmark.png", 198, 96)
+checkmark.x = display.contentWidth*4/5
+checkmark.y = display.contentHeight*1/4
+checkmark.isVisible = false
+
+-- create the redX
+redX = display.newImageRect("Images/redX.png", 198, 96)
+redX.x = display.contentWidth*4/5
+redX.y = display.contentHeight*1/4
+redX.isVisible = false
 
 -- add the event listener for the numeric field
 numericField:addEventListener( "userInput", NumericFieldListener)
+
+-- display the amount of points as a text object
+pointsText = display.newText("Points = " .. points, display.contentWidth/3, display.contentHeight/3, nil, 50)
+incorrectPointsText = display.newText("Incorrect Answers = " .. incorrectPoints, display.contentWidth/3, display.contentHeight*1/4, nil, 50)
 
 -----------------------------------------------------------------------------------------
 -- FUNCTION CALLS
