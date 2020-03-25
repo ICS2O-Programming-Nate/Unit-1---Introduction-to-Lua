@@ -11,7 +11,7 @@
 display.setStatusBar(display.HiddenStatusBar) 
 
 -- sets the background colour
-display.setDefault("background", 0/255, 0/255, 0/255)
+display.setDefault("background", 99/255, 0/255, 77/255)
 
 ------------------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
@@ -19,21 +19,16 @@ display.setDefault("background", 0/255, 0/255, 0/255)
 
 -- create local variables
 local randomOperator
-
 local questionObject
 local correctObject
 local incorrectObject
-
 local numericField
-
 local randomNumber1
 local randomNumber2
-
 local userAnswer
 local correctAnswer
 local correctAnswerText
 local incorrectAnswer
-
 local points = 0
 local wrongs = 0
 
@@ -132,16 +127,20 @@ local function NumericFieldListener( event )
 			points = points + 1
 			correctObject.isVisible = true
 
+			-- play correct sound 
+			correctSoundChannel = audio.play(correctSound) 
+
 			-- update it in the display object
 			pointsText.text = "Points = " .. points
 
 			-- perform HideCorrect with a delay and clear the text field
-			timer.performWithDelay(1500, HideCorrect)
+			timer.performWithDelay(2000, HideCorrect)
 			event.target.text = ""
 
 		else
 			-- display "Incorrect!" and show the right answer
 			incorrectObject.isVisible = true
+			wrongSoundChannel = audio.play(wrongSound)
 			correctAnswerText = display.newText( "The correct answer is " .. correctAnswer, display.contentWidth/2, display.contentHeight*(4/5), nil, 50)
 			timer.performWithDelay(2000, HideIncorrect)
 			timer.performWithDelay(2000, HideCorrectAnswerText)
@@ -184,4 +183,16 @@ numericField:addEventListener( "userInput", NumericFieldListener )
 ------------------------------------------------------------------------------------------------
 
 -- call the function to ask the question
-AskQuestion()
+AskQuestion() 
+
+------------------------------------------------------------------------------------------------
+-- SOUNDS
+------------------------------------------------------------------------------------------------
+
+-- Correct sound
+local correctSound = audio.loadSound( "Sounds/correctSound.mp3" ) -- Setting a variable to a mp3 file
+local correctSoundChannel
+
+-- Wrong sound 
+local wrongSound = audio.loadSound( "Sounds/wrongSound.mp3" )
+local wrongSoundChannel

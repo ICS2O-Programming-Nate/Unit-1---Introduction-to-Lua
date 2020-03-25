@@ -10,7 +10,7 @@
 display.setStatusBar(display.HiddenStatusBar)
 
 -- set background color 
-display.setDefault("background", 170/255, 40/255, 176/255 )
+display.setDefault("background", 192/255, 49/255, 96/255 ) 
 
 -- 
 local blueButton = display.newImageRect("Images/Fast Button Inactive@2x.png", 198, 96)

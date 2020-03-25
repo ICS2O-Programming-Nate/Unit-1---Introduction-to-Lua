@@ -73,3 +73,10 @@ end
 
 -- MoveShip will be called over and over again 
 Runtime:addEventListener("enterFrame", MoveOctopus)
+
+-- background music 
+local runescapeSound = audio.loadSound( "Sounds/RuneScape.mp3" )
+local runescapeSoundChannel
+
+-- play background music
+runescapeSoundChannel = audio.play(runescapeSound) 
