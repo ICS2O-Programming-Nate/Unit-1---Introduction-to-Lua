@@ -11,7 +11,7 @@
 display.setStatusBar(display.HiddenStatusBar)
 
 -- sets the background colour
-display.setDefault("background", 255/255, 0/255, 200/255)
+display.setDefault("background", 50/255, 70/255, 70/255)
 
 -----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES

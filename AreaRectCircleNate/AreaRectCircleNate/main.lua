@@ -45,7 +45,7 @@ areaOfRectangle = widthOfRectangle * heightOfRectangle
 -- wrtie the area on the screen. Take into consideration the size of the font when positionins it on the screen
 areaText = display.newText("The area of this rectangle with a width of /n" ..
 	widthOfRectangle .. "and a height of " .. heightOfRectangle .. "is" ..
-	areaOfRectangle .. "pixels squared.", 0, 0, Oswald, 24)
+	areaOfRectangle .. "pixels².", 0, 0, Oswald, 24)
 
 --anchor the text and set its (x,y) position
 areaText.anchorX = 0

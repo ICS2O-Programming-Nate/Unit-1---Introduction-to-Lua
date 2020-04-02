@@ -31,6 +31,17 @@ local correctAnswerText
 local incorrectAnswer
 local points = 0
 local wrongs = 0
+local gameOver
+
+-- timer vaiables 
+local totalSeconds = 5
+local secondsLeft = 5 
+local clockText 
+local countDownTimer
+-- variables for lives 
+local lives = 3
+local heart1
+local heart2
 
 ------------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -149,6 +160,45 @@ local function NumericFieldListener( event )
 	end
 end
 
+local function UpdateTime()
+
+	-- decrement the number of seconds 
+	secondsLeft = secondsLeft - 1
+
+	-- display the number of seconds left in the clock object 
+	clockText.text = secondsLeft .. ""
+
+	if (secondsLeft == 0) then
+		-- reset the number of seconds left 
+		secondsLeft = totalSeconds
+		lives = lives - 1 
+
+		-- *** IF THERE ARE NO LIVES LEFT, PLAY A LOSE SOUND, SHOW A YOU LOSE IMAGE AND CANCEL THE TIMER REMOVE AND THE THIRD HEART BY MAKING IT INVISIBLE 
+		if (lives == 2) then
+			heart2.isVisible = false
+		elseif (lives == 1) then
+			heart1.isVisible = false 
+		end
+
+		-- *** CALL THE FUNCTION TO ASK A NEW QUESTION 
+
+	end
+end
+
+-- function that calls the timer 
+local function StartTimer()
+	-- create a countdown timer that loops infinitely
+	countDownTimer = timer.performWithDelay( 1000, UpdateTime, 0)
+end 
+
+local function CancelTimer()
+	if (lives == 0 ) then 
+		timer.cancel(countDownTimer)
+		numericField.isVisible = false 
+		questionObject.isVisible = false 
+	end
+end
+
 ------------------------------------------------------------------------------------------------
 -- OBJECT CREATION
 ------------------------------------------------------------------------------------------------
@@ -178,6 +228,25 @@ numericField.inputType = "number"
 -- add the event listeners for the numeric field
 numericField:addEventListener( "userInput", NumericFieldListener )
 
+-- create game over
+gameOver = display.newImageRect("Images/")
+gameOver.x = 500
+gameOver.y = 350
+gameOver.alpha = false 
+
+-- create hte lives to display on the screen 
+heart1 = display.newImageRect("Images/heart.png", 100, 100)
+heart1.x = display.contentWidth * 7 / 8 
+heart1.y = display.contentHeight * 1 / 7 
+
+heart2 = display.newImageRect("Images/heart.png", 100, 100)
+heart2.x = display.contentWidth * 6 / 8 
+heart2.y = display.contentHeight * 1 / 7 
+
+-- create the text object for the clock 
+clockText = display.newText( secondsLeft .. "", display.contentWidth*1/6, display.contentHeight*1/7, nil, 150)
+clockText:setTextColor( 200/255, 194/255, 9/255)
+
 ------------------------------------------------------------------------------------------------
 -- FUNCTION CALLS
 ------------------------------------------------------------------------------------------------
@@ -196,3 +265,9 @@ local correctSoundChannel
 -- Wrong sound 
 local wrongSound = audio.loadSound( "Sounds/wrongSound.mp3" )
 local wrongSoundChannel
+
+-- call the function to start the timer
+StartTimer()
+
+-- call the function to stop the game
+CancelTimer()
