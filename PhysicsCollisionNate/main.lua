@@ -15,7 +15,6 @@ display.setStatusBar(display.HiddenStatusBar)
 local physics
 local ground
 local beam
-local bkg
 local beam2
 
 local backgroundMusic = audio.loadSound("Sounds/RuneScape.mp3")
@@ -69,7 +68,7 @@ physics.start()
 -- create the ground
 ground = display.newImage("Images/ground.png", 0, 0)
 ground.x = 512
-ground.y = 768
+ground.y = 800
 -- change the width to be the width of the screen
 ground.width = display.contentWidth
 -- add the physics
@@ -83,7 +82,7 @@ beam.y = display.contentCenterY*1.64
 -- change the width to be half of the iPad width
 beam.width = display.contentWidth*2
 -- change the beam height to be 1/10 of the iPad height
-beam.height = display.contentHeight*1/10
+beam.height = display.contentHeight*1/12
 --- rotate the beam -60 degrees so its on an angle
 beam:rotate(45)
 -- send it to the back layer
@@ -103,15 +102,8 @@ beam2.height = display.contentHeight*1.01
 physics.addBody(beam2, "static", {friction=0.5, bounce=0.3})
 
 -- create the background 
-background = display.newImage("Images/background.jpg", 0, 0)
--- set x and y pos
-background.x = display.contentCenterX
-background.y = display.contentCenterY
--- set width and height of the background to be the full iPad
-background.width = display.contentWidth*2
-background.height = display.contentHeight*2
--- send to back
-background:toBack()
+display.setDefault("background", 255/255, 255/255, 255/255)
+
 
 -----------------------------------------------------------------------------------------
 -- TIMER DELAYS - call each function after the given millisecond
